@@ -53,7 +53,7 @@ export class GeminiService {
 
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-3-flash-preview',
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -188,7 +188,7 @@ export class GeminiService {
     `;
 
     const chat = ai.chats.create({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-3-flash-preview',
       history: formattedHistory,
       config: {
         systemInstruction: systemInstruction.trim()

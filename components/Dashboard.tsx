@@ -16,14 +16,14 @@ const getPriorityColor = (p: string) => {
 };
 
 // Sub-components typed with React.FC to handle React-specific props like 'key' in maps
-const AuditCard: React.FC<{ data: AuditIssue[], title: string }> = ({ data, title }) => (
+const AuditCard: React.FC<{ data: AuditIssue[] | undefined, title: string }> = ({ data, title }) => (
   <div className="space-y-4">
     <h3 className="text-sm font-black text-indigo-400 uppercase tracking-widest flex items-center">
       <span className="w-1.5 h-4 bg-indigo-600 rounded-full mr-3" />
       {title}
     </h3>
     <div className="grid grid-cols-1 gap-4">
-      {data.map((item, i) => (
+      {(data ?? []).map((item, i) => (
         <div key={i} className="bg-slate-900/40 border border-white/5 p-5 rounded-2xl hover:border-indigo-500/20 transition-all">
           <div className="flex justify-between items-start mb-3">
             <h4 className="text-white font-bold text-base max-w-[80%]">{item.issue}</h4>
@@ -38,6 +38,7 @@ const AuditCard: React.FC<{ data: AuditIssue[], title: string }> = ({ data, titl
           </div>
         </div>
       ))}
+      {(data ?? []).length === 0 && <p className="text-xs text-slate-500 italic">No significant issues found in this category.</p>}
     </div>
   </div>
 );
@@ -59,7 +60,7 @@ const SocialPlatformCard: React.FC<{ platform: SocialPlatformIdea }> = ({ platfo
       <div>
         <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-2">Content Ideas</span>
         <ul className="space-y-2">
-          {platform.contentIdeas.map((idea, idx) => (
+          {(platform.contentIdeas ?? []).map((idea, idx) => (
             <li key={idx} className="text-[11px] text-slate-300 flex items-start">
               <span className="text-indigo-500 mr-2">•</span> {idea}
             </li>
@@ -69,7 +70,7 @@ const SocialPlatformCard: React.FC<{ platform: SocialPlatformIdea }> = ({ platfo
       <div>
         <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-2">Engagement Tactics</span>
         <ul className="space-y-2">
-          {platform.engagementTactics.map((tactic, idx) => (
+          {(platform.engagementTactics ?? []).map((tactic, idx) => (
             <li key={idx} className="text-[11px] text-slate-300 flex items-start">
               <span className="text-indigo-500 mr-2">→</span> {tactic}
             </li>
@@ -116,7 +117,7 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
             <svg className="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
           </div>
           <div className="text-center mb-6">
-            <div className="text-5xl font-black text-white mb-1">{strategy.healthScore}</div>
+            <div className="text-5xl font-black text-white mb-1">{strategy.healthScore ?? 0}</div>
             <div className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">Health Score</div>
           </div>
           <div className="space-y-4">
@@ -125,17 +126,17 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-slate-400">High Priority</span>
-                  <span className="text-red-400 font-bold">{strategy.onPageAudit.filter(i => i.priority === 'HIGH').length + strategy.technicalAudit.filter(i => i.priority === 'HIGH').length}</span>
+                  <span className="text-red-400 font-bold">{(strategy.onPageAudit ?? []).filter(i => i.priority === 'HIGH').length + (strategy.technicalAudit ?? []).filter(i => i.priority === 'HIGH').length}</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-slate-400">Tasks Total</span>
-                  <span className="text-white font-bold">{strategy.roadmap.length}</span>
+                  <span className="text-white font-bold">{(strategy.roadmap ?? []).length}</span>
                 </div>
               </div>
             </div>
             <div className="space-y-2">
               <span className="text-[10px] text-slate-500 font-black uppercase block tracking-widest">Target Metrics</span>
-              {strategy.dailyMetrics.map((m, i) => (
+              {(strategy.dailyMetrics ?? []).map((m, i) => (
                 <div key={i} className="flex justify-between items-center bg-slate-900/30 p-2.5 rounded-xl border border-white/5">
                   <span className="text-[10px] text-slate-400 font-medium">{m.metricName}</span>
                   <span className="text-[10px] font-black text-green-400">{m.targetValue}</span>
@@ -176,8 +177,8 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <AuditCard title="On-Page SEO" data={strategy.onPageAudit} />
                 <AuditCard title="Technical Performance" data={strategy.technicalAudit} />
-                <AuditCard title="Conversion & Trust" data={strategy.conversionAudit || []} />
-                <AuditCard title="Off-Page Signals" data={strategy.offPageAudit || []} />
+                <AuditCard title="Conversion & Trust" data={strategy.conversionAudit} />
+                <AuditCard title="Off-Page Signals" data={strategy.offPageAudit} />
               </div>
             </div>
           )}
@@ -186,7 +187,7 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
             <div className="space-y-8 animate-in slide-in-from-right-4">
               <h2 className="text-2xl font-black text-white">Top Critical Fixes</h2>
               <div className="space-y-4">
-                {strategy.topPriorityFixes.map((fix, i) => (
+                {(strategy.topPriorityFixes ?? []).map((fix, i) => (
                   <div key={i} className="flex items-center space-x-4 p-5 bg-slate-900/40 rounded-2xl border border-white/5 group hover:border-indigo-500/20 transition-all">
                     <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-black text-sm group-hover:bg-indigo-600 group-hover:text-white transition-all">
                       {i + 1}
@@ -194,6 +195,7 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
                     <p className="text-slate-200 font-medium text-sm">{fix}</p>
                   </div>
                 ))}
+                {(strategy.topPriorityFixes ?? []).length === 0 && <p className="text-slate-500 italic">No critical fixes recommended at this time.</p>}
               </div>
             </div>
           )}
@@ -207,23 +209,24 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] font-black text-indigo-400 uppercase block mb-1">Brand Tone</span>
-                  <span className="text-xs text-white font-bold">{strategy.adSocialStrategy.overallTone}</span>
+                  <span className="text-xs text-white font-bold">{strategy.adSocialStrategy?.overallTone ?? 'Professional'}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6">
                 <div className="bg-indigo-600/5 border border-indigo-500/20 p-6 rounded-3xl">
                   <h3 className="text-sm font-black text-indigo-400 uppercase tracking-widest mb-2">Paid Advertising Focus</h3>
-                  <p className="text-sm text-slate-300 leading-relaxed italic">"{strategy.adSocialStrategy.paidAdFocus}"</p>
+                  <p className="text-sm text-slate-300 leading-relaxed italic">"{strategy.adSocialStrategy?.paidAdFocus ?? 'Focus on high-intent target audience keywords and visual storytelling.'}"</p>
                 </div>
 
                 <div className="space-y-6">
                   <h3 className="text-sm font-black text-white uppercase tracking-widest">Social Media Platforms</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {strategy.adSocialStrategy.platformSuggestions.map((platform, i) => (
+                    {(strategy.adSocialStrategy?.platformSuggestions ?? []).map((platform, i) => (
                       <SocialPlatformCard key={i} platform={platform} />
                     ))}
                   </div>
+                  {(strategy.adSocialStrategy?.platformSuggestions ?? []).length === 0 && <p className="text-slate-500 italic">No social media platforms suggested for this specific roadmap.</p>}
                 </div>
               </div>
             </div>
@@ -233,7 +236,7 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
             <div className="space-y-10 animate-in slide-in-from-right-4">
               <h2 className="text-3xl font-black text-white">Fix Roadmap</h2>
               <div className="space-y-6">
-                {strategy.roadmap.map((task, idx) => (
+                {(strategy.roadmap ?? []).map((task, idx) => (
                   <div key={idx} className="relative pl-10 border-l-2 border-slate-800 hover:border-indigo-500/30 transition-all">
                     <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-4 border-slate-950 bg-slate-800" />
                     <div className="p-6 rounded-3xl border border-white/5 bg-slate-900/40 hover:bg-slate-900/60 transition-all">
@@ -246,6 +249,7 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
                     </div>
                   </div>
                 ))}
+                {(strategy.roadmap ?? []).length === 0 && <p className="text-slate-500 italic">Sequential roadmap not generated yet.</p>}
               </div>
             </div>
           )}

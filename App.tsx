@@ -19,8 +19,8 @@ const App: React.FC = () => {
     setIsLoading(true);
 
     const messages = [
-      "Performing deep market diagnostics...",
-      "Simulating search engine crawlers...",
+      "Running instant market diagnostics...",
+      "Simulating search crawlers...",
       "Analyzing competitor authority...",
       "Mapping customer acquisition funnel...",
       "Architecting multi-phase roadmap...",
@@ -28,10 +28,11 @@ const App: React.FC = () => {
     ];
 
     let msgIdx = 0;
+    // Sped up to 1.5s per message for a faster user perception
     const interval = setInterval(() => {
       msgIdx = (msgIdx + 1) % messages.length;
       setLoadingMessage(messages[msgIdx]);
-    }, 2500);
+    }, 1500);
 
     try {
       const result = await geminiService.generateStrategy(data);
@@ -103,7 +104,7 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="text-center">
-            <h2 className="text-3xl font-black text-white mb-3 tracking-tighter uppercase">Analyzing Empire Data</h2>
+            <h2 className="text-3xl font-black text-white mb-3 tracking-tighter uppercase">High-Speed Analysis</h2>
             <p className="text-indigo-400 font-bold text-sm uppercase tracking-widest">{loadingMessage}</p>
           </div>
         </div>
