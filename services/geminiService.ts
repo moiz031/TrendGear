@@ -1,14 +1,13 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { BusinessData, GrowthStrategy, ChatMessage } from "../types";
 
 export class GeminiService {
-  private getApiKey() {
-    // Vercel ya local ke liye environment variable use karo
-    return import.meta.env.VITE_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '';
-  }
-
   async generateStrategy(data: BusinessData): Promise<GrowthStrategy> {
-    const ai = new GoogleGenAI({ apiKey: this.getApiKey() });
+    // Variable name must match Vercel Environment Variable
+    const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    const model = ai.getGenerativeModel({ model: "gemini-pro" });
+
+    const isNoWebsite = !data.url || data.currentSetup.toLowerCase().includes('no website');
 
     const prompt = `
       You are a World-Class Technical SEO Auditor and Growth Consultant.
