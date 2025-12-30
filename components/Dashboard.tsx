@@ -241,11 +241,26 @@ const Dashboard: React.FC<DashboardProps> = ({ strategy, businessData }) => {
                     <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-4 border-slate-950 bg-slate-800" />
                     <div className="p-6 rounded-3xl border border-white/5 bg-slate-900/40 hover:bg-slate-900/60 transition-all">
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Target Day {task.day}</span>
-                        <span className="text-[10px] font-black text-slate-600 uppercase">KPI: {task.goal}</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-2 py-0.5 bg-indigo-500/10 rounded-md">Day {task.day}</span>
+                          <span className="text-[10px] font-black text-slate-500 uppercase">Phase {task.phase ?? 1}</span>
+                        </div>
+                        <span className="text-[10px] font-black text-slate-600 uppercase">Goal: {task.goal}</span>
                       </div>
                       <h4 className="text-xl font-bold text-white mb-2">{task.title}</h4>
-                      <p className="text-sm text-slate-400 leading-relaxed">{task.description}</p>
+                      <p className="text-sm text-slate-400 leading-relaxed mb-4">{task.description}</p>
+                      
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                        <div className="flex items-start space-x-3">
+                          <div className="mt-1 w-5 h-5 bg-indigo-500/20 rounded flex items-center justify-center flex-shrink-0">
+                            <svg className="w-3 h-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-black text-indigo-300 uppercase tracking-wider mb-1">Why it matters</p>
+                            <p className="text-xs text-slate-400 font-medium italic">{task.whyItMatters ?? "Crucial step for aligning with the overall growth strategy and achieving target KPIs."}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

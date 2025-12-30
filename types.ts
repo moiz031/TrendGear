@@ -32,6 +32,7 @@ export interface Task {
   description: string;
   goal: string;
   creativeFocus: string;
+  whyItMatters: string;
 }
 
 export interface GrowthStrategy {
