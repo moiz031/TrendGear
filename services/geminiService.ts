@@ -3,7 +3,6 @@ import { BusinessData, GrowthStrategy, ChatMessage } from "../types";
 
 export class GeminiService {
   async generateStrategy(data: BusinessData): Promise<GrowthStrategy> {
-    // Variable name must match Vercel Environment Variable
     const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
     const model = ai.getGenerativeModel({ model: "gemini-pro" });
 
