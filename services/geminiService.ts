@@ -4,7 +4,7 @@ import { BusinessData, GrowthStrategy, ChatMessage } from "../types";
 
 export class GeminiService {
   async generateStrategy(data: BusinessData): Promise<GrowthStrategy> {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+   const ai = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
     
     const isNoWebsite = !data.url || data.currentSetup.toLowerCase().includes('no website');
 
